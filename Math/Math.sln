@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Math", "Math\Math.vcxproj", "{A06ACB71-1574-429E-B67A-D76C12D29780}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dll_importing", "dll_importing\dll_importing.vcxproj", "{EE3C2CEB-7BFB-4073-A522-A0D496192F2C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A06ACB71-1574-429E-B67A-D76C12D29780}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A06ACB71-1574-429E-B67A-D76C12D29780}.Debug|Win32.Build.0 = Debug|Win32
+		{A06ACB71-1574-429E-B67A-D76C12D29780}.Release|Win32.ActiveCfg = Release|Win32
+		{A06ACB71-1574-429E-B67A-D76C12D29780}.Release|Win32.Build.0 = Release|Win32
+		{EE3C2CEB-7BFB-4073-A522-A0D496192F2C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EE3C2CEB-7BFB-4073-A522-A0D496192F2C}.Debug|Win32.Build.0 = Debug|Win32
+		{EE3C2CEB-7BFB-4073-A522-A0D496192F2C}.Release|Win32.ActiveCfg = Release|Win32
+		{EE3C2CEB-7BFB-4073-A522-A0D496192F2C}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
