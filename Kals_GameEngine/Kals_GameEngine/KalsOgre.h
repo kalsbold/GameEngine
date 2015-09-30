@@ -23,5 +23,9 @@
 #include <Terrain/OgreTerrainGroup.h>
 
 #include "Mesh.h"
+#include "CameraMan.h"
+
+static Ogre::Real rotate = .13;
+static Ogre::Real move = 250;
 
 #endif

@@ -2,7 +2,10 @@
 #include "KalsOgre.h"
 class EngineDevice
 	: public Ogre::WindowEventListener,
-	public Ogre::FrameListener, public OIS::KeyListener, public OIS::MouseListener, OgreBites::SdkTrayListener
+	public Ogre::FrameListener, 
+	public OIS::KeyListener, 
+	public OIS::MouseListener,
+	OgreBites::SdkTrayListener
 {
 public:
 	EngineDevice(void);
@@ -11,13 +14,21 @@ public:
 	bool go();
 
 private:
+	//주 로직.
 	virtual bool frameRenderingQueued(const Ogre::FrameEvent& fe);
 
+	bool processUnbufferedInput(const Ogre::FrameEvent& fe);
+
+	//실행창의 크기 조절.
 	virtual void windowResized(Ogre::RenderWindow* rw);
+	//실행창 종료.입력장치 제거
 	virtual void windowClosed(Ogre::RenderWindow* rw);
 
+	//프로그램의 초기 설정과 구동.
 	virtual bool setup();
+
 	virtual bool configure(void);
+	//생성된 SceneManager를 선택하고 OverlaySystem을 초기화 한다.
 	virtual void chooseSceneManager(void);
 	virtual void createCamera(void);
 	virtual void createFrameListener(void);
@@ -59,7 +70,7 @@ private:
 	OgreBites::InputContext     mInputContext;
 	OgreBites::Label* mInfoLabel;
 	OgreBites::SdkTrayManager*	mTrayMgr;
-	OgreBites::SdkCameraMan*    mCameraMan;     	// Basic camera controller
+	CameraMan*    mCameraMan;     	// Basic camera controller
 	OgreBites::ParamsPanel*     mDetailsPanel;   	// Sample details panel
 	bool                        mCursorWasVisible;	// Was cursor visible before dialog appeared?
 	bool                        mShutDown;
@@ -73,6 +84,6 @@ private:
 	Ogre::String                 m_ResourcePath;
 
 	Mesh *Ninja;
-
+	Mesh *Penguin;
 };
 

@@ -1,5 +1,5 @@
 #pragma once
-static Ogre::Real MOVE = 500;
+
 class Mesh
 {
 
@@ -10,15 +10,16 @@ public:
 
 	void Render(Ogre::SceneManager * sc);
 
-	void Move(const OIS::Keyboard *key, const OIS::Mouse * mouse);
-
+	void Move(const OIS::Keyboard *key, const OIS::Mouse * mouse,const Ogre::FrameEvent& fe);
+	void Move();
 private:
 	Ogre::Entity * mesh;
 	Ogre::SceneNode * meshNode;
-	Ogre::Vector3 dirVec;
-	Ogre::Camera * cam;
+	
+	
 	Ogre::String MeshName;
 	Ogre::Vector3 Position;
 
 };
 
+/// sdkcameraman 을 상속받아 injectkeydown up을 다시 구현.
