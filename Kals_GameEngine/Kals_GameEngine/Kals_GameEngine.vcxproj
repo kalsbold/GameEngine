@@ -96,11 +96,15 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CameraMan.cpp" />
     <ClCompile Include="EngineDevice.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Mesh.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CameraMan.h" />
     <ClInclude Include="EngineDevice.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="KalsOgre.h" />
     <ClInclude Include="Mesh.h" />
   </ItemGroup>

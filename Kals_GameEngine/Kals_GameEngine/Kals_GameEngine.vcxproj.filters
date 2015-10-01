@@ -42,6 +42,12 @@
     <ClInclude Include="Mesh.h">
       <Filter>Render\BasicMesh</Filter>
     </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraMan.h">
+      <Filter>Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineDevice.cpp">
@@ -49,6 +55,12 @@
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Render\BasicMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraMan.cpp">
+      <Filter>Render</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

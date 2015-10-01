@@ -22,6 +22,12 @@
 #include <Terrain/OgreTerrain.h>
 #include <Terrain/OgreTerrainGroup.h>
 
+//사용자 정의부.
+#include "InputManager.h"
 #include "Mesh.h"
+#include "CameraMan.h"
+
+static Ogre::Real rotate = .13;
+static Ogre::Real move = 250;
 
 #endif

@@ -35,6 +35,11 @@ EngineDevice::EngineDevice(void)
 EngineDevice::~EngineDevice(void)
 {
 	if(Ninja) delete Ninja;
+	if(Penguin) delete Penguin;
+	//if(Penguin1) delete Penguin1;
+	//if(Penguin2) delete Penguin2;
+	//if(Penguin3) delete Penguin3;
+	
 	if (mTrayMgr) delete mTrayMgr;
 	if (mCameraMan) delete mCameraMan;
 	if (mOverlaySystem) delete mOverlaySystem;
@@ -47,6 +52,7 @@ EngineDevice::~EngineDevice(void)
 
 	delete mRoot;
 }
+
 
 bool EngineDevice::configure(void)
 {
@@ -67,6 +73,11 @@ bool EngineDevice::configure(void)
 	}
 }
 
+/*
+함수명 : void chooseSceneManager
+함수 기능 : 생성된 SceneManager를 선택하고 OverlaySystem을 초기화 한다.
+*/
+
 void EngineDevice::chooseSceneManager(void)
 {
 	// Get the SceneManager, in this case a generic one
@@ -77,16 +88,27 @@ void EngineDevice::chooseSceneManager(void)
 	mSceneMgr->addRenderQueueListener(mOverlaySystem);
 }
 
+
+/*
+함수명 : void createCamera
+함수 기능 : 카메라 객체를 생성하고 초기 위치와 시점,시야를 결정하고 카메라 맨 객체에 할당한다.
+*/
+
 void EngineDevice::createCamera()
 {
 	mCamera = mSceneMgr->createCamera("PlayerCam");
 
-	mCamera->setPosition(Ogre::Vector3(0, 300, 500));
-	mCamera->lookAt(Ogre::Vector3(0, 0, 0));
+	mCamera->setPosition(Ogre::Vector3(500, 700, 700));
+	mCamera->lookAt(Ogre::Vector3(500, 700, -1000));
 	mCamera->setNearClipDistance(5);
 
-	mCameraMan = new OgreBites::SdkCameraMan(mCamera);
+	mCameraMan = new CameraMan(mCamera);
 }
+
+/*
+함수명 : void createFrameListener
+함수 기능 : 각종 입력 객체의 초기화 및 실행창의 설정.UI용 SdkTrayManager 초기화.
+*/
 void EngineDevice::createFrameListener(void)
 {
 	Ogre::LogManager::getSingletonPtr()->logMessage("*** Initializing OIS ***");
@@ -96,6 +118,7 @@ void EngineDevice::createFrameListener(void)
 	std::ostringstream windowHndStr;
 
 	mWindow->getCustomAttribute("WINDOW", &windowHnd);
+	mWindow->reposition(100,100);
 	windowHndStr << windowHnd;
 	pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
 
@@ -176,6 +199,15 @@ void EngineDevice::loadResources(void)
 	Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 }
 
+bool EngineDevice::processUnbufferedInput(const Ogre::FrameEvent & fe)
+{
+
+
+	return true;
+}
+
+
+
 void EngineDevice::createLight(void)
 {
 	//// Spotlight
@@ -230,12 +262,6 @@ void EngineDevice::createScene()
 	mSceneMgr->setAmbientLight(Ogre::ColourValue(0, 0, 0));
 	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
-	//// Create ninja
-	//Ogre::Entity* ninjaEntity = mSceneMgr->createEntity("ninja.mesh");
-	//ninjaEntity->setCastShadows(true);
-
-	//mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(ninjaEntity);
-
 
 	// Terrain
 	mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
@@ -271,6 +297,10 @@ void EngineDevice::createScene()
 	// Sky Techniques
 	// mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox", 300, false);
 	mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
+
+
+
+	// 지형효과.
 	// Ogre::Plane plane;
 	// plane.d = 1000;
 	// plane.normal = Ogre::Vector3::NEGATIVE_UNIT_Y;
@@ -292,7 +322,6 @@ void EngineDevice::createScene()
 
 	//groundEntity->setMaterialName("Examples/Rockwall");
 	//groundEntity->setCastShadows(false);
-
 
 
 }
@@ -331,7 +360,10 @@ void EngineDevice::setupResources(void)
 	}
 }
 
-
+/*
+함수명 : bool setup
+함수 기능 : 루트객체 생성과 각종 초기설정함수 호출과 구동.
+*/
 bool EngineDevice::setup()
 {
 	mRoot = new Ogre::Root(mPluginsCfg);
@@ -358,11 +390,20 @@ bool EngineDevice::setup()
 
 	createFrameListener();
 
-	Ninja = new Mesh("ninja.mesh",Ogre::Vector3(500,500,500));
+	Ninja = new Mesh("ninja.mesh",Ogre::Vector3(500,500,400));
 
-	Ninja->Move(mKeyboard,mMouse);
+	Penguin = new Mesh("penguin.mesh",Ogre::Vector3(500,500,100));
+	//Penguin1 = new Mesh("jaiqua.mesh",Ogre::Vector3(600,500,100));
+	//Penguin2 = new Mesh("ogrehead.mesh",Ogre::Vector3(700,500,100));
+	//Penguin3 = new Mesh("robot.mesh",Ogre::Vector3(800,500,100));
+	
+
 	Ninja->Render(mSceneMgr);
-
+	Penguin->Render(mSceneMgr);
+	//Penguin1->Render(mSceneMgr);
+	//Penguin2->Render(mSceneMgr);
+	//Penguin3->Render(mSceneMgr);
+	
 	return true;
 }
 
@@ -399,6 +440,7 @@ bool EngineDevice::go()
 
 bool EngineDevice::frameRenderingQueued(const Ogre::FrameEvent& fe)
 {
+	
 	if(mWindow->isClosed())
 		return false;
 
@@ -449,6 +491,19 @@ bool EngineDevice::frameRenderingQueued(const Ogre::FrameEvent& fe)
 		}
 	}
 
+	if(!processUnbufferedInput(fe))
+		return false;
+
+
+
+	//// Moving the Ninja
+
+	Ninja->Move(mKeyboard,mMouse,fe);
+	Penguin->Move();
+	/*Penguin1->Move();
+	Penguin2->Move();
+	Penguin3->Move();*/
+	
 	return true;
 }
 
@@ -667,8 +722,8 @@ bool EngineDevice::keyReleased(const OIS::KeyEvent &arg)
 //---------------------------------------------------------------------------
 bool EngineDevice::mouseMoved(const OIS::MouseEvent &arg)
 {
-	if (mTrayMgr->injectMouseMove(arg)) return true;
-	mCameraMan->injectMouseMove(arg);
+	//if (mTrayMgr->injectMouseMove(arg)) return true;
+	//mCameraMan->injectMouseMove(arg);
 	return true;
 }
 //---------------------------------------------------------------------------
