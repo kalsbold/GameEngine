@@ -31,30 +31,54 @@
     <Filter Include="Render\BasicMesh">
       <UniqueIdentifier>{6addf7d2-2cf1-4840-a646-096c69250077}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DotXML">
+      <UniqueIdentifier>{1ac3c39d-a1ce-4cdd-a192-77fb098a2164}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Animation">
+      <UniqueIdentifier>{986c9f53-8499-4887-96cc-279d9a819713}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{bb1d8094-b5be-4f8c-b856-0e6e9dbc8d3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CEGUI">
+      <UniqueIdentifier>{0d29168c-5dfc-463e-a8de-90f5ef1755d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Dotsceneloader.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OgreFramework.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>DotXML</Filter>
     </ClCompile>
     <ClCompile Include="MainApp.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="InputListener.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dotsceneloader.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OgreFramework.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>DotXML</Filter>
     </ClInclude>
     <ClInclude Include="MainApp.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="GUIManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OHeaders.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="InputListener.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

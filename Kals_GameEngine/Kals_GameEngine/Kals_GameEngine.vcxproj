@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="11.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -12,14 +12,20 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Dotsceneloader.cpp" />
-    <ClCompile Include="MainApp.cpp" />
-    <ClCompile Include="OgreFramework.cpp" />
+    <ClCompile Include="GUIManager.cpp" />
+    <ClCompile Include="InputListener.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MainApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dotsceneloader.h" />
+    <ClInclude Include="GUIManager.h" />
+    <ClInclude Include="InputListener.h" />
     <ClInclude Include="MainApp.h" />
-    <ClInclude Include="OgreFramework.h" />
+    <ClInclude Include="OHeaders.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6897EFDE-BE1F-4E17-AB59-28F7A18F9ED3}</ProjectGuid>
@@ -52,8 +58,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>G:\cegui-0.8.4\cegui-0.8.4\cegui\include\CEGUI\RendererModules;G:\cegui-0.8.4\cegui-0.8.4\cegui\include;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\boost\boost;$(OGRE_HOME)\include\OIS;$(IncludePath)</IncludePath>
-    <LibraryPath>G:\cegui-0.8.4\cegui-0.8.4\bin;G:\cegui-0.8.4\cegui-0.8.4\lib;$(OGRE_HOME)\boost;$(OGRE_HOME)\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>G:\bullet3-2.83.6\bullet3-2.83.6\src;G:\cegui-0.8.4\cegui-0.8.4\cegui\include\CEGUI\RendererModules;G:\cegui-0.8.4\cegui-0.8.4\cegui\include;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\boost\boost;$(OGRE_HOME)\include\OIS;$(IncludePath)</IncludePath>
+    <LibraryPath>G:\bullet3-2.83.6\bullet3-2.83.6\build\lib\Debug;G:\cegui-0.8.4\cegui-0.8.4\bin;G:\cegui-0.8.4\cegui-0.8.4\lib;$(OGRE_HOME)\boost;$(OGRE_HOME)\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -74,7 +80,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>G:\cegui-0.8.4\cegui-0.8.4\bin;G:\cegui-0.8.4\cegui-0.8.4\lib;$(OGRE_HOME)\lib\$(Configuration);$(OGRE_HOME)\boost\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>CEGUIOgreRenderer-0_d.lib;CEGUIBase-0_d.lib;OgreTerrain_d.lib;OgreOverlay_d.lib;OgreMain_d.lib;OIS_d.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>BulletCollision_Debug.lib;BulletDynamics_Debug.lib;LinearMath_Debug.lib;CEGUIOgreRenderer-0_d.lib;CEGUIBase-0_d.lib;OgreTerrain_d.lib;OgreOverlay_d.lib;OgreMain_d.lib;OIS_d.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(OutDir)\$(TargetFileName)" "$(OGRE_HOME)\Bin\$(Configuration)"</Command>

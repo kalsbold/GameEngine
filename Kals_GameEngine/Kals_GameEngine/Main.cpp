@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 	MainApp app;
     try
 	{
-        app.startDemo();
+        app.Run();
     }
     catch(Ogre::Exception& e)
     {
