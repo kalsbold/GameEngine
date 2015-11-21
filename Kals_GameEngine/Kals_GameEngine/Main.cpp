@@ -1,4 +1,4 @@
-#include "MainApp.h"
+#include "KalsOgreFrame.h"
 
 #if OGRE_PLATFORM == PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -10,7 +10,7 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT)
 int main(int argc, char **argv)
 #endif
 {
-	MainApp app;
+	KalsOgreFrame app;
     try
 	{
         app.Run();

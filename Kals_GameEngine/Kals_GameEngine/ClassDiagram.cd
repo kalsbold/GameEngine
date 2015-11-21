@@ -14,20 +14,6 @@
       <FileName>Dotsceneloader.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Ogre::SceneManager" Collapsed="true">
-    <Position X="10.5" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>/df2+f67v/3vZ3//ft/7+o7/73/+vV32+//+v3//v/w=</HashCode>
-      <FileName>g:\ogresdk\include\ogre\ogrescenemanager.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Ogre::SceneNode" Collapsed="true">
-    <Position X="10.5" Y="1.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AUBgBnxQEQgEKAEIAAkACgHhgKEAAIACIBAiAEFGkBA=</HashCode>
-      <FileName>g:\ogresdk\include\ogre\ogrescenenode.h</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="Ogre::TerrainGroup" Collapsed="true">
     <Position X="0.5" Y="7" Width="1.5" />
     <TypeIdentifier>
@@ -42,11 +28,18 @@
       <FileName>g:\ogresdk\include\ogre\terrain\ogreterrain.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="GUIManager" Collapsed="true">
-    <Position X="0.5" Y="1.5" Width="1.5" />
+  <Class Name="Ogre::SceneManager" Collapsed="true">
+    <Position X="10.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAgAAAAgAAAAAAAAAQAAAAAAAAAAAAAAQAA=</HashCode>
-      <FileName>GUIManager.h</FileName>
+      <HashCode>/df2+f67v/3vZ3//ft/7+o7/73/+vV32+//+v3//v/w=</HashCode>
+      <FileName>g:\ogresdk\include\ogre\ogrescenemanager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ogre::SceneNode" Collapsed="true">
+    <Position X="10.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AUBgBnxQEQgEKAEIAAkACgHhgKEAAIACIBAiAEFGkBA=</HashCode>
+      <FileName>g:\ogresdk\include\ogre\ogrescenenode.h</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="맑은 고딕" Size="9" />

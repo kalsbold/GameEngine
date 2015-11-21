@@ -1,4 +1,7 @@
 #pragma once
 
+
+
 #include <Ogre.h>
-#include <OIS.h>
+#include <OIS/OIS.h>
+#include <SdkTrays.h>

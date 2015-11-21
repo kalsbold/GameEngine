@@ -12,17 +12,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Dotsceneloader.cpp" />
-    <ClCompile Include="GUIManager.cpp" />
-    <ClCompile Include="InputListener.cpp" />
+    <ClCompile Include="KalsOgreFrame.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="MainApp.cpp" />
+    <ClCompile Include="PlayerCh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dotsceneloader.h" />
-    <ClInclude Include="GUIManager.h" />
-    <ClInclude Include="InputListener.h" />
-    <ClInclude Include="MainApp.h" />
+    <ClInclude Include="KalsOgreFrame.h" />
     <ClInclude Include="OHeaders.h" />
+    <ClInclude Include="PlayerCh.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

@@ -51,13 +51,10 @@
     <ClCompile Include="Dotsceneloader.cpp">
       <Filter>DotXML</Filter>
     </ClCompile>
-    <ClCompile Include="MainApp.cpp">
+    <ClCompile Include="KalsOgreFrame.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GUIManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="InputListener.cpp">
+    <ClCompile Include="PlayerCh.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,16 +62,13 @@
     <ClInclude Include="Dotsceneloader.h">
       <Filter>DotXML</Filter>
     </ClInclude>
-    <ClInclude Include="MainApp.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GUIManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="OHeaders.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="InputListener.h">
+    <ClInclude Include="KalsOgreFrame.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerCh.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
