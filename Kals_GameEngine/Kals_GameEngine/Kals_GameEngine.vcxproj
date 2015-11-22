@@ -12,13 +12,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Dotsceneloader.cpp" />
+    <ClCompile Include="KalsFrameListener.cpp" />
     <ClCompile Include="KalsOgreFrame.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MainApp.cpp" />
+    <ClCompile Include="MainListener.cpp" />
     <ClCompile Include="PlayerCh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dotsceneloader.h" />
+    <ClInclude Include="KalsFrameListener.h" />
     <ClInclude Include="KalsOgreFrame.h" />
+    <ClInclude Include="MainApp.h" />
+    <ClInclude Include="MainListener.h" />
     <ClInclude Include="OHeaders.h" />
     <ClInclude Include="PlayerCh.h" />
   </ItemGroup>

@@ -2,328 +2,175 @@
 
 KalsOgreFrame::KalsOgreFrame()
 	: m_pRoot(0),
-	m_pResourcesCfg(Ogre::StringUtil::BLANK),
-	m_pPluginsCfg(Ogre::StringUtil::BLANK),
+	m_pResourcePath(Ogre::StringUtil::BLANK),
 	m_pWindow(0),
-    m_pSceneMgr(0),
-    m_pCamera(0),
-    m_pInputMgr(0),
-    m_pMouse(0),
-    m_pKeyboard(0),
-	m_pPlayer(0)
+	m_pSceneMgr(0),
+	m_pCamera(0),
+	m_pFrameListener(0),
+	m_pResourcesCfg(Ogre::StringUtil::BLANK),
+	m_pPluginsCfg(Ogre::StringUtil::BLANK)
 {
 }
-KalsOgreFrame::~KalsOgreFrame()
-{
-	Ogre::WindowEventUtilities::removeWindowEventListener(m_pWindow, this);
- 
-	windowClosed(m_pWindow);
 
-	if(m_pRoot)
-	{
-		delete m_pRoot;
-	}
-}
 
-bool KalsOgreFrame::InitOgre()
+bool KalsOgreFrame::setup(void)
 {
+
 #ifdef _DEBUG
-	m_pResourcesCfg = "resources_d.cfg";
-	m_pPluginsCfg = "plugins_d.cfg";
+#ifndef OGRE_STATIC_LIB
+    m_pResourcesCfg = m_pResourcePath + "resources_d.cfg";
+    m_pPluginsCfg = m_pResourcePath + "plugins_d.cfg";
 #else
-	m_pResourcesCfg = "resources.cfg";
-	m_pPluginsCfg = "plugins.cfg";
+    m_pResourcesCfg = "resources_d.cfg";
+    m_pPluginsCfg = "plugins_d.cfg";
+#endif
+#else
+#ifndef OGRE_STATIC_LIB
+    m_pResourcesCfg = m_pResourcePath + "resources.cfg";
+    m_pPluginsCfg = m_pResourcePath + "plugins.cfg";
+#else
+    m_pResourcesCfg = "resources.cfg";
+    m_pPluginsCfg = "plugins.cfg";
+#endif
 #endif
 
+	m_pRoot = OGRE_NEW Root(m_pPluginsCfg);
 
-	//root 객체 초기화.
-	m_pRoot = new Ogre::Root(m_pPluginsCfg);
+	setupResources();
 
-	if(m_pRoot == NULL)
-		return false;
+	bool carryOn = configure();
+	if (!carryOn) return false;
+
+	chooseSceneManager();
+	createCamera();
+	createViewports();
+
+	// Set default mipmap level (NB some APIs ignore this)
+	TextureManager::getSingleton().setDefaultNumMipmaps(5);
+
+	// Create any resource listeners (for loading screens)
+	createResourceListener();
+	// Load resources
+	loadResources();
+
+	// Create the scene
+	createScene();
+
+	createFrameListener();
 
 	return true;
+
 }
-
-bool KalsOgreFrame::InitResource()
+/** Configures the application - returns false if the user chooses to abandon configuration. */
+bool KalsOgreFrame::configure(void)
 {
-	//리소스 로딩.
-	Ogre::ConfigFile cf;
-	cf.load(m_pResourcesCfg);
-
-	Ogre::String name, locType;
-	Ogre::ConfigFile::SectionIterator secIt = cf.getSectionIterator();
-
-	while (secIt.hasMoreElements())
+	// Show the configuration dialog and initialise the system
+	// You can skip this and use root.restoreConfig() to load configuration
+	// settings if you were sure there are valid ones saved in ogre.cfg
+	if(m_pRoot->showConfigDialog())
 	{
-		Ogre::ConfigFile::SettingsMultiMap* settings = secIt.getNext();
-		Ogre::ConfigFile::SettingsMultiMap::iterator it;
-		for (it = settings->begin(); it != settings->end(); ++it)
-		{
-			locType = it->first;
-			name = it->second;
-			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(name, locType);
-		}
+		// If returned true, user clicked OK so initialise
+		// Here we choose to let the system create a default rendering window by passing 'true'
+		m_pWindow = m_pRoot->initialise(true);
+		return true;
 	}
-
-	if (!(m_pRoot->restoreConfig() || m_pRoot->showConfigDialog()))
-    return false;
-
-	m_pWindow = m_pRoot->initialise(true, "Kals Engine.....");
-
-	Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
-	Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
-	return true;
+	else
+	{
+		return false;
+	}
 }
 
-void KalsOgreFrame::CreateCamera()
+void KalsOgreFrame::chooseSceneManager(void)
 {
-	m_pSceneMgr = m_pRoot->createSceneManager(Ogre::ST_GENERIC);
+	// Create the SceneManager, in this case a generic one
+	m_pSceneMgr = m_pRoot->createSceneManager(ST_GENERIC, "ExampleSMInstance");
+}
+void KalsOgreFrame::createCamera(void)
+{
+	// Create the camera
+	m_pCamera = m_pSceneMgr->createCamera("PlayerCam");
 
-	m_pCamera = m_pSceneMgr->createCamera("MainCam");
-	m_pCamera->setPosition(0, 0, 80);
-	m_pCamera->lookAt(0, 0, -300);
+	// Position it at 500 in Z direction
+	m_pCamera->setPosition(Vector3(0,0,500));
+	// Look back along -Z
+	m_pCamera->lookAt(Vector3(0,0,-300));
 	m_pCamera->setNearClipDistance(5);
 
-	Ogre::Viewport* vp = m_pWindow->addViewport(m_pCamera);
-	vp->setBackgroundColour(Ogre::ColourValue(0, 0, 0));
+}
+void KalsOgreFrame::createFrameListener(void)
+{
+	m_pFrameListener= new KalsFrameListener(m_pWindow, m_pCamera);
 
+	m_pRoot->addFrameListener(m_pFrameListener);
+}
+
+
+
+void KalsOgreFrame::destroyScene(void)
+{
+}    // Optional to override this
+
+void KalsOgreFrame::createViewports(void)
+{
+	// Create one viewport, entire window
+	Viewport* vp = m_pWindow->addViewport(m_pCamera);
+	vp->setBackgroundColour(ColourValue(0,0,0));
+
+	// Alter the camera aspect ratio to match the viewport
 	m_pCamera->setAspectRatio(
-		Ogre::Real(vp->getActualWidth()) /
-		Ogre::Real(vp->getActualHeight()));
+		Real(vp->getActualWidth()) / Real(vp->getActualHeight()));
 }
 
-
-void KalsOgreFrame::CreateScene()
+/// Method which will define the source of resources (other than current folder)
+void KalsOgreFrame::setupResources(void)
 {
-	m_pPlayer = new PlayerCh(m_pSceneMgr);
+#ifdef _DEBUG
+	// Load resource paths from config file
+	ConfigFile cf;
+	cf.load(m_pResourcesCfg);
+#else
+	// Load resource paths from config file
+	ConfigFile cf;
+	cf.load(m_pResourcesCfg);
+#endif
+	// Go through all sections & settings in the file
+	ConfigFile::SectionIterator seci = cf.getSectionIterator();
 
-	Ogre::Entity* ogreEntity = m_pSceneMgr->createEntity("ogrehead.mesh");
-
-	Ogre::SceneNode* ogreNode = m_pSceneMgr->getRootSceneNode()->createChildSceneNode();
-	ogreNode->attachObject(ogreEntity);
-
-	m_pSceneMgr->setAmbientLight(Ogre::ColourValue(.5, .5, .5));
-
-	Ogre::Light* light = m_pSceneMgr->createLight("MainLight");
-	light->setPosition(20, 80, 50);
+	String secName, typeName, archName;
+	while (seci.hasMoreElements())
+	{
+		secName = seci.peekNextKey();
+		ConfigFile::SettingsMultiMap *settings = seci.getNext();
+		ConfigFile::SettingsMultiMap::iterator i;
+		for (i = settings->begin(); i != settings->end(); ++i)
+		{
+			typeName = i->first;
+			archName = i->second;
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+			// OS X does not set the working directory relative to the app,
+			// In order to make things portable on OS X we need to provide
+			// the loading with it's own bundle path location
+			ResourceGroupManager::getSingleton().addResourceLocation(
+				String(macBundlePath() + "/" + archName), typeName, secName);
+#else
+			ResourceGroupManager::getSingleton().addResourceLocation(
+				archName, typeName, secName);
+#endif
+		}
+	}
 }
 
-void KalsOgreFrame::InitOIS()
+/// Optional override method where you can create resource listeners (e.g. for loading screens)
+void KalsOgreFrame::createResourceListener(void)
 {
-	// OIS
-	Ogre::LogManager::getSingletonPtr()->logMessage("*** Initializing OIS ***");
-
-	OIS::ParamList pl;
-	size_t windowHandle = 0;
-	std::ostringstream windowHandleStr;
-
-	m_pWindow->getCustomAttribute("WINDOW", &windowHandle);
-	windowHandleStr << windowHandle;
-	pl.insert(std::make_pair(std::string("WINDOW"), windowHandleStr.str()));
-
-	m_pInputMgr = OIS::InputManager::createInputSystem(pl);
-
-	m_pKeyboard = static_cast<OIS::Keyboard*>(
-		m_pInputMgr->createInputObject(OIS::OISKeyboard, false));
-	m_pMouse = static_cast<OIS::Mouse*>(
-		m_pInputMgr->createInputObject(OIS::OISMouse, false));
-
-	m_pKeyboard->setEventCallback(this);
-	m_pMouse->setEventCallback(this);
 
 }
 
-bool KalsOgreFrame::Run()
+/// Optional override method where you can perform resource group loading
+/// Must at least do ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+void KalsOgreFrame::loadResources(void)
 {
-	if(!InitOgre()) return false;
-	if(!InitResource()) return false; 
+	// Initialise, parse scripts etc
+	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 
-	CreateCamera();
-	CreateScene();
-	InitOIS();
-
-	windowResized(m_pWindow);
-	Ogre::WindowEventUtilities::addWindowEventListener(m_pWindow, this);
-
-	m_pRoot->addFrameListener(this);
-
-	m_pRoot->startRendering();
-
-	return true;
-}
-
-
-void KalsOgreFrame::windowResized(Ogre::RenderWindow* rw)
-{
-  int left, top;
-  unsigned int width, height, depth;
- 
-  rw->getMetrics(width, height, depth, left, top);
- 
-  const OIS::MouseState& ms = m_pMouse->getMouseState();
-  ms.width = width;
-  ms.height = height;
-}
- 
-bool KalsOgreFrame::frameRenderingQueued(const Ogre::FrameEvent& fe)
-{
-  if (m_pWindow->isClosed()) return false;
- 
-  m_pKeyboard->capture();
-  m_pMouse->capture();
- 
-  if (m_pKeyboard->isKeyDown(OIS::KC_ESCAPE)) return false;
- 
-  m_pPlayer->MoveCh(fe,mDirection);
-
-  return true;
-}
- 
-
-void KalsOgreFrame::windowClosed(Ogre::RenderWindow* rw)
-{
-  if(rw == m_pWindow)
-  {
-    if(m_pInputMgr)
-    {
-      m_pInputMgr->destroyInputObject(m_pMouse);
-      m_pInputMgr->destroyInputObject(m_pKeyboard);
- 
-      OIS::InputManager::destroyInputSystem(m_pInputMgr);
-      m_pInputMgr = 0;
-    }
-  }
-}
-
-
-
-bool KalsOgreFrame::keyPressed(const OIS::KeyEvent& ke)
-{
-  switch (ke.key)
-  {
-  case OIS::KC_1:
-	  m_pPlayer->getCam()->getParentSceneNode()->detachObject(m_pPlayer->getCam());
-    m_pCamNode = m_pSceneMgr->getSceneNode("CamNode1");
-    m_pCamNode->attachObject(m_pPlayer->getCam());
-	m_pPlayer->SetCamNode(m_pCamNode);
-    break;
- 
-  case OIS::KC_2:
-    m_pPlayer->getCam()->getParentSceneNode()->detachObject(m_pPlayer->getCam());
-    m_pCamNode = m_pSceneMgr->getSceneNode("CamNode2");
-    m_pCamNode->attachObject(m_pPlayer->getCam());
-	m_pPlayer->SetCamNode(m_pCamNode);
-    break;
- 
-  case OIS::KC_UP:
-  case OIS::KC_W:
-    mDirection.z = -mMove;
-    break;
- 
-  case OIS::KC_DOWN:
-  case OIS::KC_S:
-    mDirection.z = mMove;
-    break;
- 
-  case OIS::KC_LEFT:
-  case OIS::KC_A:
-    mDirection.x = -mMove;
-    break;
- 
-  case OIS::KC_RIGHT:
-  case OIS::KC_D:
-    mDirection.x = mMove;
-    break;
- 
-  case OIS::KC_PGDOWN:
-  case OIS::KC_E:
-    mDirection.y = -mMove;
-    break;
- 
-  case OIS::KC_PGUP:
-  case OIS::KC_Q:
-    mDirection.y = mMove;
-    break;
- 
-  default:
-    break;
-  }
- 
-  return true;
-}
- 
-bool KalsOgreFrame::keyReleased(const OIS::KeyEvent& ke)
-{
-  switch (ke.key)
-  {
-  case OIS::KC_UP:
-  case OIS::KC_W:
-    mDirection.z = 0;
-    break;
- 
-  case OIS::KC_DOWN:
-  case OIS::KC_S:
-    mDirection.z = 0;
-    break;
- 
-  case OIS::KC_LEFT:
-  case OIS::KC_A:
-    mDirection.x = 0;
-    break;
- 
-  case OIS::KC_RIGHT:
-  case OIS::KC_D:
-    mDirection.x = 0;
-    break;
- 
-  case OIS::KC_PGDOWN:
-  case OIS::KC_E:
-    mDirection.y = 0;
-    break;
- 
-  case OIS::KC_PGUP:
-  case OIS::KC_Q:
-    mDirection.y = 0;
-    break;
- 
-  default:
-    break;
-  }
- 
-  return true;
-}
- 
-bool KalsOgreFrame::mouseMoved(const OIS::MouseEvent& me)
-{
-  if (me.state.buttonDown(OIS::MB_Right))
-  {
-    m_pCamNode->yaw(Ogre::Degree(-mRotate * me.state.X.rel), Ogre::Node::TS_WORLD);
-    m_pCamNode->pitch(Ogre::Degree(-mRotate * me.state.Y.rel), Ogre::Node::TS_LOCAL);
-  }
- 
-  return true;
-}
- 
-bool KalsOgreFrame::mousePressed(
-  const OIS::MouseEvent& me, OIS::MouseButtonID id)
-{
-  Ogre::Light* light = m_pSceneMgr->getLight("Light1");
- 
-  switch (id)
-  {
-  case OIS::MB_Left:
-    light->setVisible(!light->isVisible());
-    break;
-  default:
-    break;
-  }
- 
-  return true;
-}
- 
-bool KalsOgreFrame::mouseReleased(
-  const OIS::MouseEvent& me, OIS::MouseButtonID id)
-{
-  return true;
 }
